@@ -3,10 +3,17 @@ var fs = require('fs');
 var util = require('util');
 const express = require('express');
 var https = require('https');
-var privateKey  = fs.readFileSync('ssl/server.key', 'utf8');
-var certificate = fs.readFileSync('ssl/server.crt', 'utf8');
+var http = require('http');
+var environment = process.env.NODE_ENV;
+//set enviro to production to disable cert lookup
+if (environment !== 'production') {
+	var privateKey  = fs.readFileSync('ssl/server.key', 'utf8');
+	var certificate = fs.readFileSync('ssl/server.crt', 'utf8');
+	var credentials = {key: privateKey, cert: certificate};
+}
+
 var bodyParser = require('body-parser');
-var credentials = {key: privateKey, cert: certificate};
+
 const app = express();
 app.use(express.static(__dirname + '/public'));
 // parse application/x-www-form-urlencoded
@@ -38,6 +45,9 @@ app.post('/api', (req, res) => {
       
 });
 
-
-var httpsServer = https.createServer(credentials, app);
+if (environment !== 'production') {
+	var httpsServer = https.createServer(credentials, app);
+} else {
+	var httpsServer = http.createServer(app);
+}
 httpsServer.listen(3000, () => console.log('Listening on port 3000!'));
