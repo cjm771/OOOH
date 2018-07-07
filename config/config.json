@@ -1,0 +1,5 @@
+{
+	"calendar_email": "`EMAIL`",
+	"keywords": ["ooo","pto","vacation","wfh"],
+	"exchange_url": "https://`MAIL_SERVER`/ews/exchange.asmx"
+}

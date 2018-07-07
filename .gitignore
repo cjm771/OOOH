@@ -1,0 +1,5 @@
+node_modules/*
+ssl/*
+config/config_real.json
+package-lock.json
+bin/*
